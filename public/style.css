@@ -292,7 +292,17 @@ body {
 }
 
 /* Responsive layout adjustments */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+    .scroll-container {
+        height: 300vh; /* Shorter scroll track on mobile for tighter interaction */
+    }
+}
+@media (max-width: 480px) {
+    .scroll-container {
+        height: 300vh; /* Shorter scroll track on mobile for tighter interaction */
+    }
+}
+@media (max-width: 600px) {
     .scroll-container {
         height: 300vh; /* Shorter scroll track on mobile for tighter interaction */
     }
