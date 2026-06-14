@@ -1,7 +1,7 @@
 async function generateResponse(prompt) {
     try {
 
-        const response = await fetch("/api/generate", {
+        const response = await fetch("https://backend-askly.vercel.app/api/generate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
