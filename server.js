@@ -27,9 +27,3 @@ app.post("/api/generate", async (req, res) => {
         });
     }
 });
-
-app.listen(3000, () => {
-    console.log(
-        "Frontend Server Running: http://localhost:3000"
-    );
-});
