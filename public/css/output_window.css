@@ -1,0 +1,323 @@
+/* Reset & Base Setup */
+:root {
+    --ai-cyan: #00e5ff;
+    --ai-blue: #2A5CFF;
+    --ai-blue-light: #5B8AFF;
+    --glass-bg: rgba(20, 20, 28, 0.45);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.15);
+}
+
+/* Output Window Section */
+#outputWindow {
+    min-height: 300px;
+    padding: 20px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#outputWindow.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* ── COMPONENT WRAPPER & GLOW ─────────────────────────── */
+.ai-output-wrapper {
+    padding: 2%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(24px);
+    border-radius: 24px;
+    box-shadow:
+        0 20px 60px rgba(0,0,0,0.4),
+        0 0 30px rgba(0, 102, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease;
+}
+.ai-output-wrapper:hover {
+    box-shadow:
+        0 25px 70px rgba(0,0,0,0.45),
+        0 0 40px rgba(0, 102, 255, 0.08);
+}
+
+/* Ambient Glow behind the panel */
+.ai-output-wrapper::before {
+    content: "";
+    position: absolute;
+    inset: -15px;
+    background: linear-gradient(
+        135deg,
+        #0b1220,
+        #0f172a,
+        #111827
+    );
+    filter: blur(35px);
+    opacity: 0.15;
+    z-index: -1;
+    animation: pulse-glow 6s ease-in-out infinite alternate;
+}
+
+/* Top shimmer line */
+.ai-output-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 15%; right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.3), transparent);
+    pointer-events: none;
+}
+
+/* ── GLASSMORPHIC PANEL ──────────────────────────────── */
+.ai-glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-top: 1px solid var(--glass-highlight);
+    border-radius: 24px;
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── HEADER (Title & Copy Button) ─────────────────────── */
+.ai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.ai-identity {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    background: linear-gradient(to right, #fff, #a1a1aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.ai-avatar {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--ai-blue), var(--ai-cyan));
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 15px rgba(0, 102, 255, 0.3);
+    animation: avatar-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes avatar-glow {
+    from { box-shadow: 0 0 15px rgba(0, 102, 255, 0.3); }
+    to { box-shadow: 0 0 20px rgba(0, 229, 255, 0.4); }
+}
+
+.ai-avatar svg {
+    width: 16px;
+    height: 16px;
+    color: #fff;
+}
+
+/* Copy Button */
+.copy-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #a1a1aa;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    font-family: inherit;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.copy-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+}
+
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.copy-btn.success {
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.1);
+    animation: copy-success-pop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes copy-success-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.copy-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ── BODY (Thinking & Output) ─────────────────────────── */
+.ai-body {
+    padding: 24px 32px;
+    min-height: 150px;
+    position: relative;
+}
+
+/* Thinking State */
+.thinking-process {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    transition: opacity 0.4s ease, max-height 0.4s ease, padding 0.4s ease;
+    max-height: 40px;
+    overflow: hidden;
+}
+
+.thinking-process.hidden {
+    opacity: 0;
+    pointer-events: none;
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-top-color: var(--ai-cyan);
+    border-right-color: var(--ai-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.thinking-text {
+    font-size: 0.95rem;
+    color: #a1a1aa;
+    background: linear-gradient(90deg, #a1a1aa 0%, #fff 50%, #a1a1aa 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 2s linear infinite;
+}
+
+/* Typed Output Area */
+.typed-output-container {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #f8fafc;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.typed-output-container.visible {
+    opacity: 1;
+}
+
+.typed-text {
+    white-space: pre-wrap;
+}
+
+/* Glowing Blinking Cursor */
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background-color: var(--ai-cyan);
+    vertical-align: middle;
+    margin-left: 2px;
+    box-shadow: 0 0 8px var(--ai-cyan);
+    animation: blink 0.8s step-end infinite;
+}
+
+.cursor.hidden {
+    display: none;
+}
+
+/* User Message in Output Window */
+.user-message {
+    width: fit-content;
+    max-width: 80%;
+    margin: 12px 0 12px auto;
+    padding: 14px 18px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    word-break: break-word;
+    animation: msg-appear 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.user-message:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* ── ANIMATIONS ───────────────────────────────────────── */
+@keyframes pulse-glow {
+    0% { opacity: 0.1; filter: blur(30px); }
+    100% { opacity: 0.25; filter: blur(45px); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes msg-appear {
+    from { opacity: 0; transform: translateY(10px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Replay Button */
+.demo-replay {
+    position: fixed;
+    bottom: 30px;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+.demo-replay:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
