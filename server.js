@@ -12,7 +12,7 @@ app.post("/api/generate", async (req, res) => {
     try {
 
         const response = await axios.post(
-            "http://127.0.0.1:8000/generate",
+            "https://backend-askly-enf76s0ed-durgamishras-projects.vercel.app/generate",
             req.body
         );
 
