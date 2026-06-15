@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
         const { prompt } = req.body;
 
         const response = await axios.post(
-            "https://backend-askly.vercel.app/generate",
+            "https://backend-askly-beige.vercel.app/",
             { prompt }
         );
 
